@@ -22,11 +22,16 @@ class URLShortener {
     }
     public async redirect(req:Request, res:Response, next:NextFunction):Promise<void>{
         const {hash} = req.params
-        const url = {
-            originalURL: "http://example.com",
-            hash: "PzDjS_uV5",
-            shortURL: "https://localhost:5000/PzDjS_uV5"
+        const url = await URLModel.findOne({hash})
+        if(!url) {
+           res.status(400).send('URL not found')
+           return
         }
+        // const url = {
+        //     originalURL: "http://example.com",
+        //     hash: "PzDjS_uV5",
+        //     shortURL: "https://localhost:5000/PzDjS_uV5"
+        // }
 
         res.redirect(url.originalURL)
     }
